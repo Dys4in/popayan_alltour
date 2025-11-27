@@ -4,6 +4,14 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.contrib.auth import authenticate, login as auth_login
 from .serializer import UsuarioSerializer
+from .models import Hotel, Restaurante, Museos, Iglesias
+from .serializer import (
+    UsuarioSerializer, 
+    HotelSerializer, 
+    RestauranteSerializer, 
+    MuseosSerializer, 
+    IglesiasSerializer
+)
 
 class AuthViewSet(viewsets.ViewSet):
     
@@ -101,3 +109,60 @@ class AuthViewSet(viewsets.ViewSet):
                 'message': 'Error de validación',
                 'errors': serializer.errors
             }, status=status.HTTP_400_BAD_REQUEST)
+        
+
+
+# ... tu AuthViewSet existente ...
+
+class HotelViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    ViewSet para listar hoteles
+    GET /api/hoteles/ - Lista todos los hoteles activos
+    GET /api/hoteles/{id}/ - Detalle de un hotel
+    """
+    queryset = Hotel.objects.filter(activo=True)
+    serializer_class = HotelSerializer
+    
+    def get_queryset(self):
+        queryset = Hotel.objects.filter(activo=True)
+        # Ordenar por fecha de creación (más recientes primero)
+        return queryset.order_by('-fecha_creacion')
+
+
+class RestauranteViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    ViewSet para listar restaurantes
+    GET /api/restaurantes/ - Lista todos los restaurantes activos
+    GET /api/restaurantes/{id}/ - Detalle de un restaurante
+    """
+    queryset = Restaurante.objects.filter(activo=True)
+    serializer_class = RestauranteSerializer
+    
+    def get_queryset(self):
+        return Restaurante.objects.filter(activo=True).order_by('-fecha_creacion')
+
+
+class MuseoViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    ViewSet para listar museos
+    GET /api/museos/ - Lista todos los museos activos
+    GET /api/museos/{id}/ - Detalle de un museo
+    """
+    queryset = Museos.objects.filter(activo=True)
+    serializer_class = MuseosSerializer
+    
+    def get_queryset(self):
+        return Museos.objects.filter(activo=True).order_by('-fecha_creacion')
+
+
+class IglesiaViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    ViewSet para listar iglesias
+    GET /api/iglesias/ - Lista todas las iglesias activas
+    GET /api/iglesias/{id}/ - Detalle de una iglesia
+    """
+    queryset = Iglesias.objects.filter(activo=True)
+    serializer_class = IglesiasSerializer
+    
+    def get_queryset(self):
+        return Iglesias.objects.filter(activo=True).order_by('-fecha_creacion')
