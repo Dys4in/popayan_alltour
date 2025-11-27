@@ -1,0 +1,202 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/noticia.css' %}">
+    <title>Noticias y Eventos - Popayán</title>
+    <link rel="shortcut icon" href="../static/img/imagen_2025-03-16_185953883-removebg-preview.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.4.0/css/all.css">
+</head>
+
+<body>
+
+    <div class="hero-container">
+
+        <nav class="navbar" id="navbar">
+            <a href="{% url 'home' %}" class="logo-nav">
+                <img src="{% static 'img/logo.png' %}" alt="Popayán Tour Logo">
+            </a>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="{% url 'home' %}">Inicio</a></li>
+                <li><a href="{% url 'semanaSanta' %}">Semana Santa</a></li>
+                <li><a href="{% url 'listar_hoteles' %}">Sitios de interés</a></li>
+                <li><a href="{% url 'historia_1537' %}">Historia</a></li>
+                <li><a href="{% url 'entretenimiento' %}">Entretenimiento</a></li>
+            </ul>
+            <div class="nav-actions">
+                <div class="nav-icons">
+                    {% if request.user.is_authenticated and request.user.is_staff %}
+                    <a href="{% url 'perfilUser' %}" class="nav-icon"><i class="fas fa-user"></i></a>
+                    {% else %}
+                    <a href=""></a>
+                    {% endif %}
+                </div>
+                <div class="hamburger" id="hamburger">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </nav>
+
+    </div>
+    <!-- fin nav -->
+
+    <div class="container">
+        <!-- Contenido principal -->
+        <main class="main-content">
+            <header class="header">
+                <h1><i>NOTICIAS Y EVENTOS</i></h1>
+            </header>
+
+            <article class="main-article">
+                <h2 class="article-title">Festival gastronómico de popayán 2025: El sazón que une culturas</h2>
+                <p class="article-subtitle">Sabores de la cocina tradicional e innovadora del país.</p>
+
+                <div class="article-meta">
+                    <span class="category">Categoría: <b>Tendencia</b></span>
+                    <span class="date">Agosto 25, 2024 a las 3:34 pm</span>
+                </div>
+
+                <!-- CAMBIAR IMAGEN AQUÍ: Reemplaza con tu imagen del festival -->
+                <div class="main-image">
+                    <!-- Aquí va tu imagen principal del festival gastronómico -->
+                    <img id="noti1" src="{% static 'img/congresoG1.png' %}" alt="">
+                </div>
+                <p class="subtitle-image">Reunión culinaria dentro del centro administrativo municipal.</p>
+                <div class="article-content">
+                    <p>Cada septiembre, la histórica ciudad blanca de Popayán se transforma en un gigantesco comedor al
+                        aire libre durante el <strong>Festival Gastronómico Internacional</strong>, un evento diseñado
+                        para rendir homenaje a la cocina y las tradiciones. El evento, que comenzó en 2003 y fue clave
+                        para que la ciudad fuera declarada por la <strong>UNESCO como Ciudad Creativa de la
+                            Gastronomía</strong>, convoca a chefs de renombre, investigadores culinarios y comensales
+                        gastronómicos de Colombia y el mundo.</p>
+
+                    <p>Durante cinco días, las plazas coloniales, casonas patrimoniales y restaurantes de la ciudad
+                        ofrecen una trilla deliciosa a partir de las recetas ancestrales del suroccidente colombiano
+                        hasta la cocina contemporánea más innovadora. En su más reciente versión el <strong>denominado
+                            de origen</strong>, el festival de...</p>
+                </div>
+            </article>
+        </main>
+
+        <!-- Sidebar con 3 secciones separadas -->
+        <aside class="sidebar">
+            <!-- Sección 1: Lo más popular -->
+            <div class="sidebar-section">
+                <div class="sidebar-header">
+                    <h2>Lo más popular</h2>
+                </div>
+
+                <div class="popular-news">
+                    <div class="news-item">
+                        <div class="news-title">Semana Santa de Popayán 2025: Tradición espiritual</div>
+                        <div class="news-date">16 de marzo, 2024</div>
+                    </div>
+
+                    <div class="news-item">
+                        <div class="news-title">Carnaval de pubenza: Ritmo, historia y resistencia cultural</div>
+                        <div class="news-date">8 de febrero, 2024</div>
+                    </div>
+
+                    <div class="news-item">
+                        <div class="news-title">Festival artesanal Manos de Oro: La herencia hecha a mano</div>
+                        <div class="news-date">15 de enero, 2024</div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Widget del clima como card separada -->
+            <div class="weather-widget">
+                <div class="weather-status">Parcialmente nublado</div>
+                <div class="weather-temp">17°C</div>
+                <div>Viento: 5.0 km/h<br>Precipi: 0%</div>
+
+                <div class="weather-details">
+                    <div class="weather-day">
+                        <div class="weather-day-name">MAR</div>
+                        <div class="weather-icon">☁️</div>
+                        <div>16°</div>
+                    </div>
+                    <div class="weather-day">
+                        <div class="weather-day-name">MIE</div>
+                        <div class="weather-icon">🌤️</div>
+                        <div>18°</div>
+                    </div>
+                    <div class="weather-day">
+                        <div class="weather-day-name">JUE</div>
+                        <div class="weather-icon">☀️</div>
+                        <div>20°</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+
+            <!-- Logo primero -->
+            <div class="logo-section">
+                <div class="logo-footer">
+                    <img src="{% static 'img/home/logo_blanco.png' %}" alt="Logo Popayán Tour">
+                </div>
+                <div class="linea-horizontal"></div>
+            </div>
+
+            <!-- Contenido del footer -->
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>Servicios</h3>
+                    <ul>
+                        <li><a href="#">Formación para el viajero</a></li>
+                        <li><a href="#">Puntos de información</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Acerca de</h3>
+                    <ul>
+                        <li><a href="#">¿Quiénes somos?</a></li>
+                        <li><a href="#">Términos y condiciones</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Contacto</h3>
+                    <ul>
+                        <li>Correo: <br>popayanalltour</li>
+                        <li>Línea gratuita: <br> 312 231 1230</li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Redes Sociales</h3>
+                    <ul class="social-icons">
+                        <li><i class="fab fa-instagram"></i>
+                            <a href="https://www.instagram.com/popayanalltour/">@PopayanAllTour</a>
+                        </li>
+                        <li><i class="fab fa-facebook"></i>
+                            <a
+                                href="https://www.facebook.com/profile.php?id=61578069024241&mibextid=wwXIfr&mibextid=wwXIfr">Popayan
+                                AllTour</a>
+                        </li>
+                        <li><i class="fab fa-youtube"></i> @popayanAlltour5002</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Derechos -->
+            <div class="footer-bottom">
+                <p>&copy; PopayanAllTour | Todos los derechos reservados</p>
+            </div>
+        </div>
+    </footer>
+    <script src="{% static 'js/noticia.js' %}"></script>
+
+</body>
+
+</html>

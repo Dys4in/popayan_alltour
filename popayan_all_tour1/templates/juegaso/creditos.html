@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Créditos de DunkeBono</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+
+        .credits-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .credits-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: shimmer 3s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .game-title {
+            font-size: 2.5em;
+            color: #4a5568;
+            margin-bottom: 10px;
+            animation: titleFloat 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleFloat {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-5px); }
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #718096;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.5s forwards;
+        }
+
+        .credits-section {
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease-out forwards;
+        }
+
+        .credits-section:nth-child(3) { animation-delay: 1s; }
+        .credits-section:nth-child(4) { animation-delay: 1.3s; }
+        .credits-section:nth-child(5) { animation-delay: 1.6s; }
+        .credits-section:nth-child(6) { animation-delay: 1.9s; }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .role-title {
+            font-size: 1.4em;
+            color: #2d3748;
+            font-weight: bold;
+            margin-bottom: 8px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .role-title::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .credits-section:hover .role-title::after {
+            width: 100%;
+        }
+
+        .person-name {
+            font-size: 1.3em;
+            color: #4a5568;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .credits-section:hover .person-name {
+            color: #667eea;
+            transform: scale(1.05);
+        }
+
+        .special-thanks {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(240, 147, 251, 0.3);
+        }
+
+        .thank-you {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .floating-icons {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .icon {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0.1;
+            animation: float 6s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.1;
+            }
+            90% {
+                opacity: 0.1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .back-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .back-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        }
+
+        @media (max-width: 768px) {
+            .credits-container {
+                padding: 30px 20px;
+                margin: 20px;
+            }
+            
+            .game-title {
+                font-size: 2em;
+            }
+            
+            .subtitle {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-icons"></div>
+    
+    <div class="credits-container">
+        <h1 class="game-title">DunkeBono 🫓☕</h1>
+        <p class="subtitle">Un proyecto creado con amor y paciencia</p>
+        
+        <div class="credits-section">
+            <div class="role-title">Creador del Juego</div>
+            <div class="person-name">Diego Orozco</div>
+        </div>
+        
+        <div class="credits-section">
+            <div class="role-title">Programación</div>
+            <div class="person-name">Diego Orozco</div>
+        </div>
+        
+        <div class="credits-section">
+            <div class="role-title">Diseño de Juego</div>
+            <div class="person-name">Diego Orozco</div>
+        </div>
+        
+        <div class="credits-section">
+            <div class="role-title">Arte y Gráficos</div>
+            <div class="person-name">Diego Orozco y Alejandro Suarez</div>
+        </div>
+        
+        <div class="special-thanks">
+            <div class="thank-you">¡Gracias por Jugar!</div>
+            <p>Este juego fue desarrollado con dedicación y cariño. Espero que disfrutes la experiencia tanto como yo disfruté creándola.</p>
+        </div>
+        
+        <button class="back-button" onclick="goBack()">← Volver al Juego</button>
+    </div>
+
+    <script>
+        // Crear iconos flotantes
+        function createFloatingIcons() {
+            const icons = ['⭐', '🎮', '🎯', '⚡', '🎨', '🔥', '💫', '🎪'];
+            const container = document.querySelector('.floating-icons');
+            
+            setInterval(() => {
+                const icon = document.createElement('div');
+                icon.className = 'icon';
+                icon.textContent = icons[Math.floor(Math.random() * icons.length)];
+                icon.style.left = Math.random() * 100 + '%';
+                icon.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                icon.style.color = `hsl(${Math.random() * 360}, 70%, 60%)`;
+                
+                container.appendChild(icon);
+                
+                setTimeout(() => {
+                    icon.remove();
+                }, 7000);
+            }, 800);
+        }
+        
+        // Función para volver al juego
+        function goBack() {
+            // Aquí puedes agregar la lógica para volver a tu juego
+            window.location.href = "{% url 'juegaso' %}";
+            // Por ejemplo: window.history.back() o window.close()
+            alert('¡Regresando al juego! 🎮');
+        }
+        
+        // Inicializar efectos
+        document.addEventListener('DOMContentLoaded', () => {
+            createFloatingIcons();
+            
+            // Agregar efecto de hover a las secciones
+            const sections = document.querySelectorAll('.credits-section');
+            sections.forEach(section => {
+                section.addEventListener('mouseenter', () => {
+                    section.style.transform = 'translateY(-5px)';
+                    section.style.transition = 'all 0.3s ease';
+                });
+                
+                section.addEventListener('mouseleave', () => {
+                    section.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
