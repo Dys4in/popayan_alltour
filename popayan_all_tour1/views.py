@@ -1623,3 +1623,8 @@ def procesiones(request):
         'procesiones': procesiones_data
     }
     return render(request, 'semanaSanta/procesiones.html', context)
+
+
+
+
+

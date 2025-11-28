@@ -22,7 +22,10 @@ router.register(r'auth', AuthViewSet, basename='auth')
 router.register(r'restaurantes', RestauranteViewSet, basename='restaurante')
 router.register(r'museos', MuseoViewSet, basename='museo')
 router.register(r'iglesias', IglesiaViewSet, basename='iglesia')
+
 urlpatterns = [
     path("api/", include(router.urls)),
-    path("api/upload-imagen/", upload_imagen, name="upload_imagen"),  # ✅ NUEVO
+    path("api/upload-imagen/", upload_imagen, name="upload_imagen"),
+    
+      # ✅ NUEVO
 ]
