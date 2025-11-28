@@ -126,7 +126,7 @@ body {
 .hero-title {
   font-family: 'Aboreto', cursive;
   font-weight: 400;
-  font-size: clamp(3rem, 13vw, 20rem);
+  font-size: clamp(3rem, 10vw, 18rem);
   letter-spacing: 0.1em;
   line-height: 1;
   text-transform: uppercase;
