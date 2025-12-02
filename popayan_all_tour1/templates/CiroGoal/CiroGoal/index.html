@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PopayanAllTour - CiroGoal</title>
+    <style>
+        /* Reset CSS */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            line-height: 1;
+            font-family: 'Archivo Black';
+            background-image: url("{% static 'assets/background_page.png' %}");
+            background-size: cover;
+            background-position: center;
+        }
+
+        ol,
+        ul {
+            list-style: none;
+        }
+
+        img,
+        video {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .game-container {
+            position: relative;
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Aboreto&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link rel="icon" href="{% static 'assets/favicon.png' %}">
+</head>
+
+<body>
+    <div id="game-container"></div>
+    <script>
+        window.urlEntretenimiento = "{% url 'entretenimiento' %}";
+    </script>
+
+    <script src="{% static 'js/phaser.js' %}"></script>
+    <script type="module" src="{% static 'js/src/main.js' %}"></script>
+</body>
+
+</html>

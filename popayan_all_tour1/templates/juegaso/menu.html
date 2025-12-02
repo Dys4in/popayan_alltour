@@ -1,0 +1,42 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DunkeBono</title>
+    <link rel="icon" href="{% static 'assets/favicon.png' %}">
+
+    <link rel="stylesheet" href="{% static 'css/juegos/menu.css' %}">
+</head>
+<body>
+    <div class="menu-container">
+        <div class="background-image"></div>
+        <div class="overlay"></div>
+        <h1 class="game-title">DunkeBono</h1>
+        <div class="menu-buttons">
+            <button onclick="startGame()">Play</button>
+            <button onclick="showCredits()">Credits</button>
+            <button onclick="volver()">Volver</button>
+        </div>
+    </div>
+    <script>
+    function startGame() {
+        window.location.href = "{% url 'juegaso' %}";
+    }
+
+    function showLevels() {
+        window.location.href = "{% url 'menu' %}";
+    }
+
+    function showCredits() {
+        window.location.href = "{% url 'creditos' %}"; 
+    }
+    function volver() {
+        window.location.href = "{% url 'entretenimiento' %}"; 
+    }
+</script>
+    <script src="{% static 'js/juegos/menu.js' %}"></script>
+</body>
+</html>

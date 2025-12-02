@@ -1,0 +1,284 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/perfilUser.css' %}">
+    <title>Editor de Usuario - Popayán Tour</title>
+    <link rel="shortcut icon" href="{% static 'img/home/imagen_2025-03-16_185953883-removebg-preview.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.4.0/css/all.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+    <a href="#" class="logo-nav">
+        <img src="{% static 'img/home/logo.png' %}" alt="Popayán Tour Logo">
+    </a>
+    <ul class="nav-menu" id="nav-menu">
+        <li><a href="{% url 'home' %}">Inicio</a></li>
+        <li><a href="{% url 'semanaSanta' %}">Semana santa</a></li>
+        <li><a href="">Sitios de interés</a></li>
+        <li><a href="">Historia</a></li>
+        <li><a href="{% url 'entretenimiento' %}">Entretenimiento</a></li>
+    </ul>
+    <div class="nav-actions">
+        <div class="nav-icons">
+            <a href="#" class="nav-icon"><i class="fas fa-search"></i></a>
+            <a href="{% url 'perfilUser' %}" class="nav-icon"><i class="fas fa-user"></i></a>
+        </div>
+        <div class="hamburger" id="hamburger">
+            <i class="fas fa-bars"></i>
+        </div>
+    </div>
+</nav>
+
+<!-- CONTENIDO PRINCIPAL -->
+<div class="container">
+    
+    <!-- MENSAJES DE FEEDBACK -->
+    {% if messages %}
+    <div style="margin-bottom: 20px;">
+        {% for message in messages %}
+        <div style="padding: 15px; border-radius: 4px; margin-bottom: 10px; 
+                    background-color: {% if message.tags == 'success' %}#28a745{% elif message.tags == 'error' %}#dc3545{% else %}#ffc107{% endif %}; 
+                    color: white;">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <!-- SECCIÓN: EDITAR USUARIO -->
+    <div class="form-section">
+        <h2 class="section-title">Editar usuario</h2>
+        
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="form-grid">
+                <!-- PRIMERA COLUMNA -->
+                <div class="form-column">
+                    <div class="form-group">
+                        <label for="id_email">Correo electrónico</label>
+                        <input type="email" name="email" id="id_email" value="{{ usuario.email }}" required>
+                        {% if form.email.errors %}
+                            <span style="color: #dc3545; font-size: 12px;">{{ form.email.errors.0 }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="id_nueva_password">Nueva Contraseña (opcional)</label>
+                        <input type="password" name="nueva_password" id="id_nueva_password" placeholder="Dejar en blanco para mantener la actual">
+                        {% if form.nueva_password.errors %}
+                            <span style="color: #dc3545; font-size: 12px;">{{ form.nueva_password.errors.0 }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="id_confirmar_password">Confirmar Contraseña</label>
+                        <input type="password" name="confirmar_password" id="id_confirmar_password" placeholder="Confirmar nueva contraseña">
+                        {% if form.confirmar_password.errors %}
+                            <span style="color: #dc3545; font-size: 12px;">{{ form.confirmar_password.errors.0 }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="id_nombre_completo">Nombre completo</label>
+                        <input type="text" name="nombre_completo" id="id_nombre_completo" value="{{ usuario.nombre_completo }}" required>
+                        {% if form.nombre_completo.errors %}
+                            <span style="color: #dc3545; font-size: 12px;">{{ form.nombre_completo.errors.0 }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="id_fecha_nacimiento">Fecha de nacimiento</label>
+                        <input type="date" name="fecha_nacimiento" id="id_fecha_nacimiento" value="{{ usuario.fecha_nacimiento|date:'Y-m-d' }}" required>
+                        {% if form.fecha_nacimiento.errors %}
+                            <span style="color: #dc3545; font-size: 12px;">{{ form.fecha_nacimiento.errors.0 }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="id_direccion">Dirección</label>
+                        <textarea name="direccion" id="id_direccion" placeholder="Dirección completa" required>{{ usuario.direccion }}</textarea>
+                        {% if form.direccion.errors %}
+                            <span style="color: #dc3545; font-size: 12px;">{{ form.direccion.errors.0 }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- SEGUNDA COLUMNA -->
+                <div class="form-column">
+                    <div class="form-group">
+                        <label for="id_telefono">Teléfono</label>
+                        <input type="tel" name="telefono" id="id_telefono" value="{{ usuario.telefono }}" required>
+                        {% if form.telefono.errors %}
+                            <span style="color: #dc3545; font-size: 12px;">{{ form.telefono.errors.0 }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="id_profesion">Profesión</label>
+                        <input type="text" name="profesion" id="id_profesion" value="{{ usuario.profesion|default:'' }}">
+                        {% if form.profesion.errors %}
+                            <span style="color: #dc3545; font-size: 12px;">{{ form.profesion.errors.0 }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="id_identificacion">Identificación</label>
+                        <input type="text" name="identificacion" id="id_identificacion" value="{{ usuario.identificacion }}" required>
+                        {% if form.identificacion.errors %}
+                            <span style="color: #dc3545; font-size: 12px;">{{ form.identificacion.errors.0 }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="id_rol">Rol</label>
+                        <select name="rol" id="id_rol" onchange="toggleTipoEstablecimiento()" {% if not user.is_staff %}disabled{% endif %}>
+                            {% for rol in form.fields.rol.queryset %}
+                                <option value="{{ rol.id }}" {% if usuario.rol.id == rol.id %}selected{% endif %}>
+                                    {{ rol.rol }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        {% if not user.is_staff %}
+                            <input type="hidden" name="rol" value="{{ usuario.rol.id }}">
+                        {% endif %}
+                        {% if form.rol.errors %}
+                            <span style="color: #dc3545; font-size: 12px;">{{ form.rol.errors.0 }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group" id="tipoEstablecimientoGroup" 
+                         {% if usuario.rol.rol|lower != 'empresario' %}style="display: none;"{% endif %}>
+                        <label for="id_tipo_establecimiento">Tipo de establecimiento</label>
+                        <select name="tipo_establecimiento" id="id_tipo_establecimiento" {% if not user.is_staff %}disabled{% endif %}>
+                            <option value="">---------</option>
+                            {% for tipo in form.fields.tipo_establecimiento.queryset %}
+                                <option value="{{ tipo.id }}" {% if usuario.tipo_establecimiento and usuario.tipo_establecimiento.id == tipo.id %}selected{% endif %}>
+                                    {{ tipo.nombre }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        {% if not user.is_staff %}
+                            <input type="hidden" name="tipo_establecimiento" value="{{ usuario.tipo_establecimiento.id|default:'' }}">
+                        {% endif %}
+                        {% if form.tipo_establecimiento.errors %}
+                            <span style="color: #dc3545; font-size: 12px;">{{ form.tipo_establecimiento.errors.0 }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- TERCERA COLUMNA: IMAGEN DE PERFIL -->
+                <div class="profile-section">
+                    <h3>Imagen de perfil</h3>
+                    <div class="profile-image-container">
+                        <div class="profile-image" id="profileImage">
+                            {% if usuario.imagen_perfil %}
+                                <img src="{{ usuario.imagen_perfil.url }}" 
+                                     alt="Perfil" 
+                                     style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                            {% else %}
+                                <div class="profile-icon">👤</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="upload-controls">
+                        <button type="button" class="upload-btn" onclick="document.getElementById('fileInput').click()">
+                            Subir imagen
+                        </button>
+                        <button type="button" class="upload-icon" onclick="resetImage()" title="Eliminar imagen">
+                            ⚙️
+                        </button>
+                    </div>
+                    {{ form.imagen_perfil }}
+                </div>
+            </div>
+            
+            <button type="submit" class="save-btn">Aplicar cambios</button>
+        </form>
+    </div>
+
+    <!-- SECCIÓN: ELIMINAR USUARIO -->
+    <div class="form-section">
+        <h2 class="section-title">Eliminar usuario</h2>
+        
+        <div class="delete-section">
+            <div class="delete-warning">
+                ¿Estás seguro de que deseas eliminar este perfil de usuario? Esta acción es permanente y no se podrá deshacer. Todos los datos asociados al usuario serán eliminados de forma definitiva.
+            </div>
+            
+            <button type="button" class="delete-btn" onclick="confirmDelete()">
+                <span class="warning-icon"></span>
+                Eliminar cuenta
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="footer-content">
+        <!-- Logo primero -->
+        <div class="logo-section">
+            <div class="logo-footer">
+                <img src="{% static 'img/home/logo_blanco.png' %}" alt="Logo Popayán Tour">
+            </div>
+            <div class="linea-horizontal"></div>
+        </div>
+
+        <!-- Contenido del footer -->
+        <div class="footer-grid">
+            <div class="footer-section">
+                <h3>Servicios</h3>
+                <ul>
+                    <li><a href="#">Formación para el viajero</a></li>
+                    <li><a href="#">Puntos de información</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Acerca de</h3>
+                <ul>
+                    <li><a href="#">¿Quiénes somos?</a></li>
+                    <li><a href="#">Términos y condiciones</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contacto</h3>
+                <ul>
+                    <li>Correo: <br>popayanalltour</li>
+                    <li>Línea gratuita: <br> 312 231 1230</li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Redes Sociales</h3>
+                <ul class="social-icons">
+                    <li><i class="fab fa-instagram"></i>
+                        <a href="https://www.instagram.com/popayanalltour/">@PopayanAllTour</a>
+                    </li>
+                    <li><i class="fab fa-facebook"></i>
+                        <a href="https://www.facebook.com/profile.php?id=61578069024241">Popayan AllTour</a>
+                    </li>
+                    <li><i class="fab fa-youtube"></i> @popayanAlltour5002</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Derechos -->
+        <div class="footer-bottom">
+            <p>&copy; PopayanAllTour | Todos los derechos reservados</p>
+        </div>
+    </div>
+</footer>
+
+<!-- JavaScript -->
+<script src="{% static 'js/perfilUser.js' %}"></script>
+</body>
+</html>

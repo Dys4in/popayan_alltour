@@ -1,0 +1,30 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Baloncesto con Cañón</title>
+    <link rel="stylesheet" href="{% static 'css/juegos/juegos.css' %}">     
+</head>
+<body>
+    <div id="gameContainer">
+        <img id="backgroundImage" src="img/ChatGPT Image 12 abr 2025, 06_46_42.png" alt="Fondo del juego">
+        <canvas id="gameCanvas" width="1000" height="600"></canvas>
+        <div id="scoreDisplay">Puntuación: 0</div>
+        <div id="levelDisplay">Nivel: 1</div>
+        <div id="notification"></div> 
+        <!-- Botón para volver al menú -->
+        <button id="menuButton" aria-label="Volver al menú principal">Volver al Menú</button>
+    </div>
+ <script>
+    function startGame() {
+        window.location.href = "{% url 'juegaso' %}";
+    }
+
+   
+</script>
+    <script src="{% static 'js/juego/juego.js' %}"></script>
+</body>
+</html>

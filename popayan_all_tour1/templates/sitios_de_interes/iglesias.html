@@ -1,0 +1,259 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Museos</title>
+    <link rel="stylesheet" href="{% static 'css/sitios_de_interes/iglesias.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.4.0/css/all.css">
+    <link rel="shortcut icon" href="../static/img/imagen_2025-03-16_185953883-removebg-preview.png" type="image/x-icon">
+</head>
+
+<body>
+    <div class="hero-container">
+        <nav class="navbar" id="navbar">
+            <a href="{% url 'home' %}" class="logo-nav">
+                <img src="{% static 'img/home/logo.png' %}" alt="Popayán Tour Logo">
+            </a>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="{% url 'home' %}">Inicio</a></li>
+                <li><a href="{% url 'semanaSanta' %}">Semana santa</a></li>
+                <li><a href="{% url 'listar_hoteles' %}">Sitios de interés</a></li>
+                <li><a href="{% url 'historia_1537' %}">Historia</a></li>
+                <li><a href="{% url 'entretenimiento' %}">Entretenimiento</a></li>
+            </ul>
+            <div class="nav-actions">
+                <div class="nav-icons">
+                    {% if request.user.is_authenticated and request.user.is_staff %}
+                    <a href="{% url 'perfilUser' %}" class="nav-icon"><i class="fas fa-user"></i></a>
+                    {% else %}
+                    <a href=""></a>
+                    {% endif %}
+                </div>
+                <div class="hamburger" id="hamburger">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="hero-container1">
+        <h1 class="hero-title">IGLESIAS</h1>
+
+        <div class="navigation-buttons">
+            <a href="{% url 'listar_hoteles' %}" class="nav-button">HOTELES</a>
+            <a href="{% url 'listar_restaurantes' %}" class="nav-button">RESTAURANTES</a>
+            <a href="{% url 'listar_museos' %}" class="nav-button">MUSEOS</a>
+            <a href="{% url 'listar_iglesias' %}" class="nav-button active">IGLESIAS</a>
+        </div>
+    </div>
+
+    <!-- Botón para agregar museo -->
+    {% if user.is_authenticated %}
+    {% if puede_gestionar %}
+    <div style="text-align: center; margin: 20px 0;">
+        <a href="{% url 'agregar_establecimiento' tipo %}" class="cta"
+            style="display: inline-block; padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 5px;">
+            <i class="fas fa-plus"></i> Agregar Nuevo {{ tipo|title }}
+        </a>
+    </div>
+    {% endif %}
+    {% endif %}
+
+    <!-- Mensajes -->
+    {% if messages %}
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+        {% for message in messages %}
+        <div
+            style="padding: 10px; margin: 10px 0; border-radius: 5px; {% if message.tags == 'success' %}background: #d4edda; color: #155724;{% else %}background: #f8d7da; color: #721c24;{% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Inicio cards -->
+    <div class="padre">
+        {% for iglesia in establecimientos %}
+        <div class="hotel-layout">
+            <!-- Sección de Información -->
+            <div class="info-section">
+                <h1 class="hotel-title">{{ iglesia.nombre }}</h1>
+                
+                <p class="hotel-description">
+                    {{ iglesia.descripcion }}
+                </p>
+
+                <div class="divider"></div>
+
+                <div class="details-grid">
+                    <!-- Horario -->
+                    <div class="detail-item">
+                        <h3>Horario:</h3>
+                        <div class="detail-content">
+                            <p>{{ iglesia.horario_aten }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <h3>Dirección:</h3>
+                        <div class="detail-content">
+                            <p>{{ iglesia.direccion }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Métodos de pago -->
+                    <div class="detail-item">
+                        <h3>Contratación de servicios:</h3>
+                        <div class="payment-icons">
+                            <div class="payment-icon mastercard">$</div>
+                        </div>
+                    </div>
+
+                    <!-- Promoción -->
+                    
+                </div>
+            </div>
+
+            <!-- Sección de Imágenes -->
+            <div class="images-section">
+                
+                <div class="image-box image-medium">
+                    {% if iglesia.imagen %}
+                    <img src="{{ iglesia.get_imagen_url }}" alt="{{ iglesia.nombre }}">
+                    {% else %}
+                    <img src="{% static 'img/default.jpg' %}" alt="Sin imagen">
+                    {% endif %}
+                    <!-- Aquí va tu imagen -->
+                </div>
+                
+                <!-- Botón Saber más -->
+                <div class="btn-container">
+                    <a href="{{ iglesia.url_mas_info }}" target="_blank" class="btn-ver">Saber más</a>
+                    <!-- Solo empresarios o staff -->
+                    {% if puede_gestionar %}
+                    <div style="margin-top: 10px; display: flex; gap: 10px;">
+                        <a href="{% url 'editar_establecimiento' tipo=tipo id=iglesia.id %}" class="btn-editar">
+                            <i class="fas fa-edit"></i> Editar
+                        </a>
+                        <button type="button" 
+                                class="btn-eliminar delete-trigger" 
+                                data-id="{{ iglesia.id }}" 
+                                data-name="{{ iglesia.nombre }}"
+                                data-tipo="{{ tipo }}"
+                                style="border: none; cursor: pointer;">
+                            <i class="fas fa-trash"></i> Eliminar
+                        </button>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div style="text-align: center; padding: 50px; width: 100%;">
+            <h3>No hay {{ tipo }}s disponibles</h3>
+            <p>Aún no se han agregado {{ tipo }}s.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <br><br><br>
+
+    <!-- Botones de establecimiento -->
+    <div class="but-create">
+        {% if botones_establecimiento %}
+        <div class="botones-empresario">
+            {% for boton in botones_establecimiento %}
+            <a href="{{ boton.url }}" class="btn-establecimiento">{{ boton.nombre }}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+    <br><br>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <!-- Logo primero -->
+            <div class="logo-section">
+                <div class="logo-footer">
+                    <img src="{% static 'img/home/logo_blanco.png' %}" alt="Logo Popayán Tour">
+                </div>
+                <div class="linea-horizontal"></div>
+            </div>
+
+            <!-- Contenido del footer -->
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>Servicios</h3>
+                    <ul>
+                        <li><a href="#">Formación para el viajero</a></li>
+                        <li><a href="#">Puntos de información</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Acerca de</h3>
+                    <ul>
+                        <li><a href="#">¿Quiénes somos?</a></li>
+                        <li><a href="#">Términos y condiciones</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Contacto</h3>
+                    <ul>
+                        <li>Correo: <br>popayanalltour</li>
+                        <li>Línea gratuita: <br> 312 231 1230</li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Redes Sociales</h3> 
+                    <ul class="social-icons">
+                        <li><i class="fab fa-instagram"></i>
+                            <a href="https://www.instagram.com/popayanalltour/">@PopayanAllTour</a>
+                        </li>
+                        <li><i class="fab fa-facebook"></i>
+                            <a href="https://www.facebook.com/profile.php?id=61578069024241&mibextid=wwXIfr&mibextid=wwXIfr">Popayan AllTour</a>
+                        </li>
+                        <li><i class="fab fa-youtube"></i> @popayanAlltour5002</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Derechos -->
+            <div class="footer-bottom">
+                <p>&copy; PopayanAllTour | Todos los derechos reservados</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ✅ Modal de confirmación para eliminar -->
+    <div id="deleteModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" data-close="delete">&times;</span>
+            <h3>Confirmar Eliminación</h3>
+            <p>¿Estás seguro de que deseas eliminar <strong id="hotelName"></strong>?</p>
+            <p><strong>Esta acción no se puede deshacer.</strong></p>
+            <div class="modal-actions">
+                <button id="cancelDelete" class="btn btn-secondary">Cancelar</button>
+                <form id="deleteForm" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-delete">Sí, Eliminar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+        <script src="{% static 'js/sitios_de_interes/iglesias.js' %}"></script>
+
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+
+</html>
