@@ -1,0 +1,1 @@
+web: gunicorn popayan_all_tour.wsgi --log-file -

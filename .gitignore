@@ -1,0 +1,43 @@
+# Variables de entorno
+.env
+.env.local
+.env.production
+
+# Base de datos local
+*.sqlite3
+db.sqlite3
+
+# Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+ENV/
+.venv
+
+# Django
+*.log
+staticfiles/
+media/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Railway
+.railway
+
+
