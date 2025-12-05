@@ -19,7 +19,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.shortcuts import render
-from popayan_all_tour1.views import registro,noticia, login_view, terminos, home, entretenimiento, perfilUser, semanas, procesiones,login_view,logout_view, terminos, home, redirect_by_role, historia, historia_1601_view, historia_1701_view, historia_1801_view, historia_1831_view, memory, vista_establecimientos, agregar_establecimiento, editar_establecimiento,eliminar_establecimiento, listar_establecimientos_publicos, hoteles_view, eliminar_imagen_perfil, descargar_historia_completa_pdf, descargar_historia_año_pdf, reactivar_establecimiento, eliminar_permanente_establecimiento
+from popayan_all_tour1.views import registro,noticia, login_view, terminos, home, entretenimiento, perfilUser, semanas, procesiones,login_view,logout_view, terminos, home, redirect_by_role, historia, historia_1601_view, historia_1701_view, historia_1801_view, historia_1831_view, memory, vista_establecimientos, agregar_establecimiento, editar_establecimiento,eliminar_establecimiento, listar_establecimientos_publicos, hoteles_view, eliminar_imagen_perfil, reactivar_establecimiento, eliminar_permanente_establecimiento
 from popayan_all_tour1.views import (
     CustomPasswordResetView, CustomPasswordResetDoneView,
     CustomPasswordResetConfirmView, CustomPasswordResetCompleteView
@@ -67,10 +67,6 @@ urlpatterns = [
     path('creditos/', lambda request: render(request, 'juegaso/creditos.html'), name='creditos'),
     
     path('ciroGoal/', lambda request: render(request, 'CiroGoal/CiroGoal/index.html'), name='CiroGoal'),
-
-#api pdf
-    path('historia/pdf/completa/', descargar_historia_completa_pdf, name='pdf_historia_completa'),
-    path('historia/pdf/<int:ano>/', descargar_historia_año_pdf, name='pdf_historia_año'),
 
 
     # API
