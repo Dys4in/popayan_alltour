@@ -20,7 +20,7 @@ from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.shortcuts import render
-from popayan_all_tour1.views import registro,noticia, exportar_estadisticas_admin_excel, exportar_estadisticas_admin_pdf, exportar_estadisticas_empresario_excel, exportar_estadisticas_empresario_pdf ,registrar_visita, dashboard_administrador , estadisticas_establecimiento, login_view, terminos, home, entretenimiento, perfilUser, semanas, procesiones,login_view,logout_view, terminos, home, redirect_by_role, historia, historia_1601_view, historia_1701_view, historia_1801_view, historia_1831_view, memory, vista_establecimientos, agregar_establecimiento, editar_establecimiento,eliminar_establecimiento, listar_establecimientos_publicos, hoteles_view, eliminar_imagen_perfil, descargar_historia_completa_pdf, descargar_historia_año_pdf, reactivar_establecimiento, eliminar_permanente_establecimiento
+from popayan_all_tour1.views import registro,noticia, exportar_estadisticas_admin_excel, exportar_estadisticas_admin_pdf, exportar_estadisticas_empresario_excel, exportar_estadisticas_empresario_pdf ,registrar_visita, dashboard_administrador , estadisticas_establecimiento, login_view, terminos, home, entretenimiento, perfilUser, semanas, procesiones,login_view,logout_view, terminos, home, redirect_by_role, historia, historia_1601_view, historia_1701_view, historia_1801_view, historia_1831_view, memory, vista_establecimientos, agregar_establecimiento, editar_establecimiento,eliminar_establecimiento, listar_establecimientos_publicos, hoteles_view, eliminar_imagen_perfil, reactivar_establecimiento, eliminar_permanente_establecimiento
 from popayan_all_tour1.views import (
     CustomPasswordResetView, CustomPasswordResetDoneView,
     CustomPasswordResetConfirmView, CustomPasswordResetCompleteView
@@ -69,9 +69,8 @@ urlpatterns = [
     
     path('ciroGoal/', lambda request: render(request, 'CiroGoal/CiroGoal/index.html'), name='CiroGoal'),
 
-#api pdf
-    path('historia/pdf/completa/', descargar_historia_completa_pdf, name='pdf_historia_completa'),
-    path('historia/pdf/<int:ano>/', descargar_historia_año_pdf, name='pdf_historia_año'),
+
+    
 
 
     # API
