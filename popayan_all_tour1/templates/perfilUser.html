@@ -1,0 +1,707 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/perfilUser.css' %}">
+    <title>Editor de Usuario - Popayán Tour</title>
+    <style>
+        /* Estilos para el botón de cerrar sesión */
+        .logout-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .logout-btn:hover {
+            background-color: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+        }
+        
+        .logout-btn i {
+            font-size: 14px;
+        }
+        
+        /* Ajuste del grid cuando no hay imagen de perfil */
+        .form-grid {
+            grid-template-columns: 1fr 1fr !important;
+        }
+        
+        /* ==================== MODAL DE LOGOUT ==================== */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: rgba(20, 20, 20, 0.95);
+            backdrop-filter: blur(20px);
+            margin: 10% auto;
+            padding: 35px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 450px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: slideDown 0.4s ease;
+            color: #ffffff;
+        }
+
+        .modal-content h3 {
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .modal-content p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+
+        .close {
+            color: rgba(255, 255, 255, 0.5);
+            float: right;
+            font-size: 32px;
+            font-weight: 300;
+            line-height: 1;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: -10px;
+        }
+
+        .close:hover {
+            color: #e74c3c;
+            transform: rotate(90deg);
+        }
+
+        .modal-actions {
+            margin-top: 30px;
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 14px;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .modal-actions form {
+            display: inline;
+        }
+
+        .modal-actions form .btn-delete {
+            background: rgba(231, 76, 60, 0.15);
+            color: #e74c3c;
+            border: 1px solid rgba(231, 76, 60, 0.3);
+        }
+
+        .modal-actions form .btn-delete:hover {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: #ffffff;
+            border-color: transparent;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(231, 76, 60, 0.3);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Estilos especiales para modal de eliminación */
+        .danger-modal {
+            border-top: 4px solid #ffffff;
+        }
+
+        .warning-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(156, 156, 156, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .warning-box p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+        .warning-box strong {
+            color: #ffffff88;
+        }
+
+        .btn-danger-permanent {
+            background: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 12px 28px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-danger-permanent:hover {
+            background: linear-gradient(135deg, #ffffff 0%, #ffffffa3 100%);
+            color: #000000;
+            border-color: transparent;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.4);
+        }
+
+        .btn-danger-permanent:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-danger-permanent:disabled:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Responsive para modal */
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 95%;
+                padding: 25px;
+                margin: 20% auto;
+            }
+
+            .modal-actions {
+                flex-direction: column;
+            }
+
+            .btn-secondary,
+            .modal-actions form .btn-delete {
+                width: 100%;
+            }
+        }
+    </style>
+    <link rel="shortcut icon" href="{% static 'img/home/imagen_2025-03-16_185953883-removebg-preview.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.4.0/css/all.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+    <a href="#" class="logo-nav">
+        <img src="{% static 'img/home/logo.png' %}" alt="Popayán Tour Logo">
+    </a>
+    <ul class="nav-menu" id="nav-menu">
+        <li><a href="{% url 'home' %}">Inicio</a></li>
+        <li><a href="{% url 'semanaSanta' %}">Semana santa</a></li>
+        <li><a href="">Sitios de interés</a></li>
+        <li><a href="">Historia</a></li>
+        <li><a href="{% url 'entretenimiento' %}">Entretenimiento</a></li>
+    </ul>
+    <div class="nav-actions">
+        <div class="nav-icons">
+            <a href="{% url 'perfilUser' %}" class="nav-icon"><i class="fas fa-user"></i></a>
+        </div>
+        <div class="hamburger" id="hamburger">
+            <i class="fas fa-bars"></i>
+        </div>
+    </div>
+</nav>
+
+<!-- CONTENIDO PRINCIPAL -->
+<div class="container">
+    
+    <!-- MENSAJES DE FEEDBACK -->
+    {% if messages %}
+    <div style="margin-bottom: 20px;">
+        {% for message in messages %}
+        <div style="padding: 15px; border-radius: 4px; margin-bottom: 10px; 
+                    background-color: {% if message.tags == 'success' %}#28a745{% elif message.tags == 'error' %}#dc3545{% else %}#ffc107{% endif %}; 
+                    color: white;">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <!-- SECCIÓN: EDITAR USUARIO -->
+    <div class="form-section">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+            <h2 class="section-title" style="margin-bottom: 0; border-bottom: none; padding-bottom: 0;">Editar usuario</h2>
+            
+            <!-- BOTÓN CERRAR SESIÓN -->
+            <button type="button" class="logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+                Cerrar sesión
+            </button>
+        </div>
+        
+        <div style="border-bottom: 1px solid #444444; margin-bottom: 25px;"></div>
+        
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="form-grid">
+                <!-- PRIMERA COLUMNA -->
+                <div class="form-column">
+                    <div class="form-group">
+                        <label for="id_email">Correo electrónico</label>
+                        <input type="email" name="email" id="id_email" value="{{ usuario.email }}" required>
+                        {% if form.email.errors %}
+                            <span style="color: #dc3545; font-size: 12px;">{{ form.email.errors.0 }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="id_nueva_password">Nueva Contraseña (opcional)</label>
+                        <input type="password" name="nueva_password" id="id_nueva_password" placeholder="Dejar en blanco para mantener la actual">
+                        {% if form.nueva_password.errors %}
+                            <span style="color: #dc3545; font-size: 12px;">{{ form.nueva_password.errors.0 }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="id_confirmar_password">Confirmar Contraseña</label>
+                        <input type="password" name="confirmar_password" id="id_confirmar_password" placeholder="Confirmar nueva contraseña">
+                        {% if form.confirmar_password.errors %}
+                            <span style="color: #dc3545; font-size: 12px;">{{ form.confirmar_password.errors.0 }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="id_nombre_completo">Nombre completo</label>
+                        <input type="text" name="nombre_completo" id="id_nombre_completo" value="{{ usuario.nombre_completo }}" required>
+                        {% if form.nombre_completo.errors %}
+                            <span style="color: #dc3545; font-size: 12px;">{{ form.nombre_completo.errors.0 }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- CAMPO FECHA DE NACIMIENTO - COMENTADO -->
+                    <!--
+                    <div class="form-group">
+                        <label for="id_fecha_nacimiento">Fecha de nacimiento</label>
+                        <input type="date" name="fecha_nacimiento" id="id_fecha_nacimiento" value="{{ usuario.fecha_nacimiento|date:'Y-m-d' }}" required>
+                        {% if form.fecha_nacimiento.errors %}
+                            <span style="color: #dc3545; font-size: 12px;">{{ form.fecha_nacimiento.errors.0 }}</span>
+                        {% endif %}
+                    </div>
+                    -->
+                    
+                    <div class="form-group">
+                        <label for="id_direccion">Dirección</label>
+                        <textarea name="direccion" id="id_direccion" placeholder="Dirección completa" required>{{ usuario.direccion }}</textarea>
+                        {% if form.direccion.errors %}
+                            <span style="color: #dc3545; font-size: 12px;">{{ form.direccion.errors.0 }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- SEGUNDA COLUMNA -->
+                <div class="form-column">
+                    <div class="form-group">
+                        <label for="id_telefono">Teléfono</label>
+                        <input type="tel" name="telefono" id="id_telefono" value="{{ usuario.telefono }}" required>
+                        {% if form.telefono.errors %}
+                            <span style="color: #dc3545; font-size: 12px;">{{ form.telefono.errors.0 }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="id_profesion">Profesión</label>
+                        <input type="text" name="profesion" id="id_profesion" value="{{ usuario.profesion|default:'' }}">
+                        {% if form.profesion.errors %}
+                            <span style="color: #dc3545; font-size: 12px;">{{ form.profesion.errors.0 }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- CAMPO IDENTIFICACIÓN - COMENTADO -->
+                    <!--
+                    <div class="form-group">
+                        <label for="id_identificacion">Identificación</label>
+                        <input type="text" name="identificacion" id="id_identificacion" value="{{ usuario.identificacion }}" required>
+                        {% if form.identificacion.errors %}
+                            <span style="color: #dc3545; font-size: 12px;">{{ form.identificacion.errors.0 }}</span>
+                        {% endif %}
+                    </div>
+                    -->
+                    
+                    <div class="form-group">
+                        <label for="id_rol">Rol</label>
+                        <select name="rol" id="id_rol" onchange="toggleTipoEstablecimiento()" {% if not user.is_staff %}disabled{% endif %}>
+                            {% for rol in form.fields.rol.queryset %}
+                                <option value="{{ rol.id }}" {% if usuario.rol.id == rol.id %}selected{% endif %}>
+                                    {{ rol.rol }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        {% if not user.is_staff %}
+                            <input type="hidden" name="rol" value="{{ usuario.rol.id }}">
+                        {% endif %}
+                        {% if form.rol.errors %}
+                            <span style="color: #dc3545; font-size: 12px;">{{ form.rol.errors.0 }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group" id="tipoEstablecimientoGroup" 
+                         {% if usuario.rol.rol|lower != 'empresario' %}style="display: none;"{% endif %}>
+                        <label for="id_tipo_establecimiento">Tipo de establecimiento</label>
+                        <select name="tipo_establecimiento" id="id_tipo_establecimiento" {% if not user.is_staff %}disabled{% endif %}>
+                            <option value="">---------</option>
+                            {% for tipo in form.fields.tipo_establecimiento.queryset %}
+                                <option value="{{ tipo.id }}" {% if usuario.tipo_establecimiento and usuario.tipo_establecimiento.id == tipo.id %}selected{% endif %}>
+                                    {{ tipo.nombre }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        {% if not user.is_staff %}
+                            <input type="hidden" name="tipo_establecimiento" value="{{ usuario.tipo_establecimiento.id|default:'' }}">
+                        {% endif %}
+                        {% if form.tipo_establecimiento.errors %}
+                            <span style="color: #dc3545; font-size: 12px;">{{ form.tipo_establecimiento.errors.0 }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- TERCERA COLUMNA: IMAGEN DE PERFIL - COMENTADA -->
+                <!--
+                <div class="profile-section">
+                    <h3>Imagen de perfil</h3>
+                    <div class="profile-image-container">
+                        <div class="profile-image" id="profileImage">
+                            {% if usuario.imagen_perfil %}
+                                <img src="{{ usuario.imagen_perfil.url }}" 
+                                     alt="Perfil" 
+                                     style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                            {% else %}
+                                <div class="profile-icon">👤</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="upload-controls">
+                        <button type="button" class="upload-btn" onclick="document.getElementById('fileInput').click()">
+                            Subir imagen
+                        </button>
+                        <button type="button" class="upload-icon" onclick="resetImage()" title="Eliminar imagen">
+                            ⚙️
+                        </button>
+                    </div>
+                    {{ form.imagen_perfil }}
+                </div>
+                -->
+            </div>
+            
+            <button type="submit" class="save-btn">Aplicar cambios</button>
+        </form>
+    </div>
+
+    <!-- SECCIÓN: ELIMINAR USUARIO -->
+    <div class="form-section">
+        <h2 class="section-title">Eliminar usuario</h2>
+        
+        <div class="delete-section">
+            <div class="delete-warning">
+                ¿Estás seguro de que deseas eliminar este perfil de usuario? Esta acción es permanente y no se podrá deshacer. Todos los datos asociados al usuario serán eliminados de forma definitiva.
+            </div>
+            
+            <button type="button" class="delete-btn" id="deleteAccountBtn">
+                <span class="warning-icon"></span>
+                Eliminar cuenta
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Logout -->
+<div id="logoutModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" id="closeLogoutModal">&times;</span>
+        <h3>¿Cerrar Sesión?</h3>
+        <p>¿Estás seguro de que quieres cerrar tu sesión?</p>
+        <div class="modal-actions">
+            <button id="cancelLogout" class="btn btn-secondary">Cancelar</button>
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-delete">Sí, salir</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Eliminación de Cuenta -->
+<div id="deleteAccountModal" class="modal" style="display: none;">
+    <div class="modal-content danger-modal">
+        <span class="close" id="closeDeleteModal">&times;</span>
+        <h3 style="color: #fcff36bf;">⚠️ ELIMINAR CUENTA PERMANENTEMENTE</h3>
+        <p>¿Estás seguro de que deseas eliminar tu cuenta de forma permanente?</p>
+        <div class="warning-box">
+            <p><strong>¡ADVERTENCIA!</strong> Esta acción NO se puede deshacer.</p>
+            <p>Todos tus datos serán eliminados completamente de la base de datos.</p>
+        </div>
+        <div class="form-group" style="margin: 20px 0;">
+            <label for="confirmDeleteText" style="color: #ffffff; font-size: 14px; margin-bottom: 10px; display: block;">
+                Para confirmar, escribe: <strong style="color: #dc2336;">ELIMINAR</strong>
+            </label>
+            <input 
+                type="text" 
+                id="confirmDeleteText" 
+                placeholder="Escribe ELIMINAR"
+                style="width: 100%; padding: 12px; border: 2px solid #ffffff; background: rgba(20, 20, 20, 0.8); color: white; border-radius: 8px; font-size: 14px;"
+            >
+            <span id="deleteError" style="color: #dc3545; font-size: 12px; display: none; margin-top: 5px;">
+                Debes escribir exactamente "ELIMINAR" para continuar
+            </span>
+        </div>
+        <div class="modal-actions">
+            <button id="cancelDelete" class="btn btn-secondary">Cancelar</button>
+            <button type="button" id="confirmDeleteBtn" class="btn btn-danger-permanent">
+                <i class="fas fa-trash-alt"></i> Sí, Eliminar Permanentemente
+            </button>
+        </div>
+        
+        <!-- Formulario oculto para eliminar -->
+        <form id="deleteAccountForm" method="post" action="" style="display: none;">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="delete">
+        </form>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="footer-content">
+        <!-- Logo primero -->
+        <div class="logo-section">
+            <div class="logo-footer">
+                <img src="{% static 'img/home/logo_blanco.png' %}" alt="Logo Popayán Tour">
+            </div>
+            <div class="linea-horizontal"></div>
+        </div>
+
+        <!-- Contenido del footer -->
+        <div class="footer-grid">
+
+
+            <div class="footer-section">
+                <h3>Acerca de</h3>
+                <ul>
+                    <li><a href="#">¿Quiénes somos?</a></li>
+                    <li><a href="#">Términos y condiciones</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contacto</h3>
+                <ul>
+                    <li>Correo: <br>popayanalltour</li>
+                    <li>Línea gratuita: <br> 312 231 1230</li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Redes Sociales</h3>
+                <ul class="social-icons">
+                    <li><i class="fab fa-instagram"></i>
+                        <a href="https://www.instagram.com/popayanalltour/">@PopayanAllTour</a>
+                    </li>
+                    <li><i class="fab fa-facebook"></i>
+                        <a href="https://www.facebook.com/profile.php?id=61578069024241">Popayan AllTour</a>
+                    </li>
+                    <li><i class="fab fa-youtube"></i> @popayanAlltour5002</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Derechos -->
+        <div class="footer-bottom">
+            <p>&copy; PopayanAllTour | Todos los derechos reservados</p>
+        </div>
+    </div>
+</footer>
+
+<!-- JavaScript -->
+<script src="{% static 'js/perfilUser.js' %}"></script>
+<script>
+    // ==================== MODAL DE LOGOUT ====================
+    document.addEventListener('DOMContentLoaded', function() {
+        const logoutBtn = document.getElementById('logoutBtn');
+        const logoutModal = document.getElementById('logoutModal');
+        const closeLogoutModal = document.getElementById('closeLogoutModal');
+        const cancelLogout = document.getElementById('cancelLogout');
+
+        // Abrir modal de logout
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', function() {
+                logoutModal.style.display = 'block';
+            });
+        }
+
+        // Cerrar modal con X
+        if (closeLogoutModal) {
+            closeLogoutModal.addEventListener('click', function() {
+                logoutModal.style.display = 'none';
+            });
+        }
+
+        // Cerrar modal con botón Cancelar
+        if (cancelLogout) {
+            cancelLogout.addEventListener('click', function() {
+                logoutModal.style.display = 'none';
+            });
+        }
+
+        // Cerrar modal al hacer clic fuera de él
+        window.addEventListener('click', function(event) {
+            if (event.target === logoutModal) {
+                logoutModal.style.display = 'none';
+            }
+            if (event.target === deleteAccountModal) {
+                deleteAccountModal.style.display = 'none';
+                resetDeleteModal();
+            }
+        });
+
+        // ==================== MODAL DE ELIMINACIÓN DE CUENTA ====================
+        const deleteAccountBtn = document.getElementById('deleteAccountBtn');
+        const deleteAccountModal = document.getElementById('deleteAccountModal');
+        const closeDeleteModal = document.getElementById('closeDeleteModal');
+        const cancelDelete = document.getElementById('cancelDelete');
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        const confirmDeleteText = document.getElementById('confirmDeleteText');
+        const deleteError = document.getElementById('deleteError');
+        const deleteAccountForm = document.getElementById('deleteAccountForm');
+
+        // Abrir modal de eliminación
+        if (deleteAccountBtn) {
+            deleteAccountBtn.addEventListener('click', function() {
+                deleteAccountModal.style.display = 'block';
+                resetDeleteModal();
+            });
+        }
+
+        // Cerrar modal con X
+        if (closeDeleteModal) {
+            closeDeleteModal.addEventListener('click', function() {
+                deleteAccountModal.style.display = 'none';
+                resetDeleteModal();
+            });
+        }
+
+        // Cerrar modal con botón Cancelar
+        if (cancelDelete) {
+            cancelDelete.addEventListener('click', function() {
+                deleteAccountModal.style.display = 'none';
+                resetDeleteModal();
+            });
+        }
+
+        // Validar texto mientras escribe
+        if (confirmDeleteText) {
+            confirmDeleteText.addEventListener('input', function() {
+                const text = this.value;
+                if (text === 'ELIMINAR') {
+                    confirmDeleteBtn.disabled = false;
+                    deleteError.style.display = 'none';
+                    this.style.borderColor = '#28a745';
+                } else {
+                    confirmDeleteBtn.disabled = true;
+                    this.style.borderColor = '#dc3545';
+                }
+            });
+        }
+
+        // Confirmar eliminación
+        if (confirmDeleteBtn) {
+            confirmDeleteBtn.addEventListener('click', function() {
+                const text = confirmDeleteText.value;
+                
+                if (text === 'ELIMINAR') {
+                    // Enviar formulario
+                    deleteAccountForm.submit();
+                } else {
+                    // Mostrar error
+                    deleteError.style.display = 'block';
+                    confirmDeleteText.style.borderColor = '#dc3545';
+                    confirmDeleteText.focus();
+                    
+                    // Agregar animación de shake
+                    confirmDeleteText.style.animation = 'shake 0.5s';
+                    setTimeout(() => {
+                        confirmDeleteText.style.animation = '';
+                    }, 500);
+                }
+            });
+        }
+
+        // Función para resetear el modal
+        function resetDeleteModal() {
+            if (confirmDeleteText) {
+                confirmDeleteText.value = '';
+                confirmDeleteText.style.borderColor = '#dc3545';
+            }
+            if (deleteError) {
+                deleteError.style.display = 'none';
+            }
+            if (confirmDeleteBtn) {
+                confirmDeleteBtn.disabled = true;
+            }
+        }
+    });
+</script>
+
+<style>
+    /* Animación shake para el input */
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+        20%, 40%, 60%, 80% { transform: translateX(5px); }
+    }
+</style>
+</body>
+</html>
