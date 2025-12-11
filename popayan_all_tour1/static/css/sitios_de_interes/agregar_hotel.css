@@ -14,7 +14,7 @@ body {
   color: white;
   
   /* Fondo con imagen */
-  background-image: url('../img/fodo_formu.jpg');
+  background-image: url('../../img/fodo_formu.jpg');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
